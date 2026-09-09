@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Account — AgroLink Ebonyi</title>
+<meta name="description" content="See the produce you listed and the orders connected to your AgroLink Ebonyi account." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>My Account</h1>
+    <p><strong id="accountEmail"></strong> — role: <span id="accountRole"></span></p>
+  </div>
+</header>
+
+<section>
+  <div class="container" id="accountBody">
+    <h2>My Produce Listings</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Crop</th><th>Quantity</th><th>Price / unit</th><th>LGA</th><th>Status</th></tr></thead>
+        <tbody id="myListings"></tbody>
+      </table>
+    </div>
+
+    <h2 style="margin-top:34px">My Orders</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Crop</th><th>Quantity</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="myOrders"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Farmer Support Directory — AgroLink Ebonyi</title>
+<meta name="description" content="Find demo cooperatives and agricultural extension support across the LGAs of Ebonyi State." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html" class="active">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Farmer Support Directory</h1>
+    <p>Find cooperatives and agricultural extension support in your area.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="filters">
+      <input type="search" id="dirSearch" placeholder="Search organisation" oninput="filterDirectory()" style="max-width:280px" />
+      <select id="dirLga" onchange="filterDirectory()" style="max-width:220px">
+        <option value="all">All LGAs</option>
+        <option value="Abakaliki">Abakaliki</option>
+        <option value="Afikpo North">Afikpo North</option>
+        <option value="Afikpo South">Afikpo South</option>
+        <option value="Ezza North">Ezza North</option>
+        <option value="Ezza South">Ezza South</option>
+        <option value="Ikwo">Ikwo</option>
+        <option value="Izzi">Izzi</option>
+        <option value="Ohaukwu">Ohaukwu</option>
+      </select>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card dir-card" data-name="Abakaliki Rice Farmers Cooperative" data-lga="Abakaliki"><div class="card-body">
+        <h3>Abakaliki Rice Farmers Cooperative </h3>
+        <p class="small muted">Cooperative — Abakaliki LGA</p>
+        <p class="small">Services: Cooperative support, farm inputs, group marketing.</p>
+        <p class="small muted">📍 Rice Mill Road, Abakaliki</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Ebonyi Agricultural Extension Office" data-lga="Abakaliki"><div class="card-body">
+        <h3>Ebonyi Agricultural Extension Office </h3>
+        <p class="small muted">Extension service — Abakaliki LGA</p>
+        <p class="small">Services: Extension services, agricultural advice, pest control guidance.</p>
+        <p class="small muted">📍 Secretariat Area, Abakaliki</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Afikpo Cassava Growers Union" data-lga="Afikpo North"><div class="card-body">
+        <h3>Afikpo Cassava Growers Union </h3>
+        <p class="small muted">Cooperative — Afikpo North LGA</p>
+        <p class="small">Services: Cooperative support, cassava processing, farm training.</p>
+        <p class="small muted">📍 Afikpo Town</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Afikpo South Youth Farmers Network" data-lga="Afikpo South"><div class="card-body">
+        <h3>Afikpo South Youth Farmers Network </h3>
+        <p class="small muted">Farmer group — Afikpo South LGA</p>
+        <p class="small">Services: Farm training, youth mentoring, shared equipment.</p>
+        <p class="small muted">📍 Nguzu Edda</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Ezza North Agro Inputs Centre" data-lga="Ezza North"><div class="card-body">
+        <h3>Ezza North Agro Inputs Centre </h3>
+        <p class="small muted">Input supplier — Ezza North LGA</p>
+        <p class="small">Services: Farm inputs, seeds, fertiliser advice.</p>
+        <p class="small muted">📍 Ebiaji, Ezza North</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Onueke Farmers Multipurpose Cooperative" data-lga="Ezza South"><div class="card-body">
+        <h3>Onueke Farmers Multipurpose Cooperative </h3>
+        <p class="small muted">Cooperative — Ezza South LGA</p>
+        <p class="small">Services: Cooperative support, savings groups, bulk selling.</p>
+        <p class="small muted">📍 Onueke</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Ikwo Yam Farmers Association" data-lga="Ikwo"><div class="card-body">
+        <h3>Ikwo Yam Farmers Association </h3>
+        <p class="small muted">Farmer group — Ikwo LGA</p>
+        <p class="small">Services: Agricultural advice, seed yam sourcing, storage support.</p>
+        <p class="small muted">📍 Echiaba, Ikwo</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Izzi Rice Processing Cluster" data-lga="Izzi"><div class="card-body">
+        <h3>Izzi Rice Processing Cluster </h3>
+        <p class="small muted">Processing group — Izzi LGA</p>
+        <p class="small">Services: Milling, parboiling, farm training.</p>
+        <p class="small muted">📍 Iboko, Izzi</p>
+      </div></div>
+
+      <div class="card dir-card" data-name="Ohaukwu Extension Support Unit" data-lga="Ohaukwu"><div class="card-body">
+        <h3>Ohaukwu Extension Support Unit </h3>
+        <p class="small muted">Extension service — Ohaukwu LGA</p>
+        <p class="small">Services: Extension services, agricultural advice, farm visits.</p>
+        <p class="small muted">📍 Ezzamgbo</p>
+      </div></div>
+    </div>
+
+    <p id="dirEmpty" class="muted" style="display:none;margin-top:20px">No organisations matched your search.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><h4>AgroLink Ebonyi</h4><p class="small">Connecting Ebonyi Farmers to Better Markets.</p></div>
+      <div><h4>Pages</h4>
+        <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
+        <a href="list-produce.html">List Your Produce</a><a href="prices.html">Market Prices</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

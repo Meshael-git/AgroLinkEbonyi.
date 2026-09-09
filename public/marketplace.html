@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Browse Produce — AgroLink Ebonyi Marketplace</title>
+<meta name="description" content="Browse crops available directly from farmers across Ebonyi State: rice, cassava, yam and vegetables." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html" class="active">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Browse Available Produce</h1>
+    <p>Find crops directly from farmers across Ebonyi State.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="filters">
+      <input type="search" id="searchInput" placeholder="Search crops, e.g. rice" oninput="filterListings()" style="max-width:280px" />
+      <select id="lgaFilter" onchange="filterListings()" style="max-width:220px">
+        <option value="all">All LGAs</option>
+        <option value="Abakaliki">Abakaliki</option>
+        <option value="Afikpo North">Afikpo North</option>
+        <option value="Afikpo South">Afikpo South</option>
+        <option value="Ezza North">Ezza North</option>
+        <option value="Ezza South">Ezza South</option>
+        <option value="Ikwo">Ikwo</option>
+        <option value="Izzi">Izzi</option>
+        <option value="Ohaukwu">Ohaukwu</option>
+      </select>
+    </div>
+
+    <div class="filters">
+      <button class="chip active" data-category="all" onclick="selectCategory(this)">All</button>
+      <button class="chip" data-category="rice" onclick="selectCategory(this)">Rice</button>
+      <button class="chip" data-category="cassava" onclick="selectCategory(this)">Cassava</button>
+      <button class="chip" data-category="yam" onclick="selectCategory(this)">Yam</button>
+      <button class="chip" data-category="maize" onclick="selectCategory(this)">Maize</button>
+      <button class="chip" data-category="vegetables" onclick="selectCategory(this)">Vegetables</button>
+    </div>
+
+    <div class="grid grid-4" id="listingGrid"></div>
+
+    <p id="noResults" class="muted" style="display:none;margin-top:20px">No produce found yet. Farmers can add produce from the "List Your Produce" page.</p>
+  </div>
+</section>
+
+<div class="modal hidden" id="detailsModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Listing</h3>
+    <div id="modalBody"></div>
+
+    <div id="orderBox" style="margin-top:14px">
+      <input type="hidden" id="orderListingId" />
+      <input type="hidden" id="orderUnitPrice" />
+      <div class="form-field">
+        <label for="orderQuantity">Quantity you want to buy</label>
+        <input type="number" id="orderQuantity" min="1" value="1" />
+      </div>
+      <div id="orderMessage"></div>
+      <p style="margin-top:12px"><button class="btn btn-primary btn-small" onclick="placeOrder()">Place Order</button></p>
+    </div>
+
+    <button class="btn btn-outline btn-small" onclick="closeDetails()">Close</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><h4>AgroLink Ebonyi</h4><p class="small">Connecting Ebonyi Farmers to Better Markets.</p></div>
+      <div><h4>Pages</h4>
+        <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
+        <a href="list-produce.html">List Your Produce</a><a href="prices.html">Market Prices</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

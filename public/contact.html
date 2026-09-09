@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Partner With AgroLink Ebonyi — Contact</title>
+<meta name="description" content="Partner with AgroLink Ebonyi as a buyer, NGO, government body, cooperative or agricultural organisation." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html" class="active">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Partner With AgroLink Ebonyi</h1>
+    <p>We are building a stronger connection between farmers, buyers, cooperatives, NGOs and agricultural organisations.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="grid grid-2">
+      <div>
+        <form id="contactForm" class="card" style="padding:22px" onsubmit="handleContactForm(event)">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="name">Name</label>
+              <input type="text" id="name" required minlength="2" />
+            </div>
+            <div class="form-field">
+              <label for="organization">Organization</label>
+              <input type="text" id="organization" />
+            </div>
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" required placeholder="name@example.com" />
+            </div>
+            <div class="form-field">
+              <label for="contactPhone">Phone</label>
+              <input type="tel" id="contactPhone" pattern="[0-9+ ]{7,15}" placeholder="08030000000" />
+            </div>
+            <div class="form-field form-full">
+              <label for="partnershipType">Partnership Type</label>
+              <select id="partnershipType" required>
+                <option value="">Select one</option>
+                <option>Buyer</option><option>NGO</option><option>Government</option>
+                <option>Cooperative</option><option>Agricultural Organization</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-field form-full">
+              <label for="message">Message</label>
+              <textarea id="message" rows="5" required minlength="10" placeholder="Tell us how you would like to work with us."></textarea>
+            </div>
+          </div>
+          <p style="margin-top:18px"><button type="submit" class="btn btn-primary">Send Message</button></p>
+          <div class="success-message hidden" id="contactSuccess">Thank you — your message has been submitted successfully.</div>
+        </form>
+      </div>
+
+      <div>
+        <div class="card"><div class="card-body">
+          <h3>Contact Information <span class="badge">Demo</span></h3>
+          <p class="small muted">The details below are placeholder demo information for this exhibition prototype.</p>
+          <p class="small">📧 admin@agrolinkebonyi.com<br />
+             📞 08140265183<br />
+             📍 Abakaliki, Ebonyi State, Nigeria</p>
+          <hr style="border:none;border-top:1px solid var(--border);margin:16px 0" />
+          <h3>Who we work with</h3>
+          <p class="small">Buyers and off-takers, NGOs, government agricultural agencies, farming cooperatives and input suppliers who want to reach farmers directly.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><h4>AgroLink Ebonyi</h4><p class="small">Connecting Ebonyi Farmers to Better Markets.</p></div>
+      <div><h4>Pages</h4>
+        <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
+        <a href="list-produce.html">List Your Produce</a><a href="prices.html">Market Prices</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

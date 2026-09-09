@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weather &amp; Planting Advisory — AgroLink Ebonyi</title>
+<meta name="description" content="Current weather for Abakaliki, Ebonyi State with a simple rule-based planting advisory for farmers." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html" class="active">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Weather &amp; Planting Advisory</h1>
+    <p>Current conditions for Abakaliki, Ebonyi State.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container" style="max-width:900px">
+    <div class="weather-main">
+      <div class="weather-icon" id="weatherIcon">⏳</div>
+      <div class="weather-temp" id="weatherTemp">--°C</div>
+      <p id="weatherCondition">Loading weather…</p>
+      <p class="small muted" id="weatherSource">Fetching live weather data…</p>
+    </div>
+
+    <div class="grid grid-3" style="margin-top:22px">
+      <div class="card"><div class="card-body"><p class="small muted">Humidity</p><h3 id="weatherHumidity">--</h3></div></div>
+      <div class="card"><div class="card-body"><p class="small muted">Wind Speed</p><h3 id="weatherWind">--</h3></div></div>
+      <div class="card"><div class="card-body"><p class="small muted">Rain Probability (today)</p><h3 id="weatherRain">--</h3></div></div>
+    </div>
+
+    <div class="advisory">
+      <h3 id="advisoryTitle">Planting Advisory</h3>
+      <p id="advisoryText">The advisory will appear once weather data loads.</p>
+      <p class="small muted">This advisory is a simple educational demo based on rainfall probability only. It is not professional agricultural advice — always consult your local extension officer.</p>
+    </div>
+
+    <!-- <p class="muted small" style="margin-top:18px">
+      Weather is fetched with plain <code>fetch()</code> from the free Open-Meteo service, which needs no API key.
+      If you switch to a provider that requires a key, replace the clearly marked placeholder
+      <code>WEATHER_API_KEY</code> in <code>script.js</code> — never publish a real secret key.
+      If the request fails, realistic demo weather data is shown instead.
+    </p> -->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><h4>AgroLink Ebonyi</h4><p class="small">Connecting Ebonyi Farmers to Better Markets.</p></div>
+      <div><h4>Pages</h4>
+        <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
+        <a href="list-produce.html">List Your Produce</a><a href="prices.html">Market Prices</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Market Price Board — AgroLink Ebonyi</title>
+<meta name="description" content="Sample market prices for rice, cassava, yam, maize and vegetables across Ebonyi State markets." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html" class="active">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Market Price Board</h1>
+    <p>Know the market before you sell.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="filters">
+      <select id="cropFilter" onchange="filterPrices()" style="max-width:200px">
+        <option value="all">All Crops</option>
+        <option value="Rice">Rice</option>
+        <option value="Cassava">Cassava</option>
+        <option value="Yam">Yam</option>
+        <option value="Maize">Maize</option>
+        <option value="Vegetables">Vegetables</option>
+      </select>
+      <select id="marketFilter" onchange="filterPrices()" style="max-width:260px">
+        <option value="all">All Markets</option>
+        <option value="Abakaliki Rice Mill Market">Abakaliki Rice Mill Market</option>
+        <option value="Abakaliki Main Market">Abakaliki Main Market</option>
+        <option value="Afikpo Market">Afikpo Market</option>
+        <option value="Onueke Market">Onueke Market</option>
+      </select>
+      <select id="sortPrices" onchange="sortPrices()" style="max-width:220px">
+        <option value="crop">Sort: Crop name</option>
+        <option value="low">Sort: Price (low to high)</option>
+        <option value="high">Sort: Price (high to low)</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table id="priceTable">
+        <thead>
+          <tr><th>Crop</th><th>Market</th><th>Average Price</th><th>Unit</th><th>Last Updated</th></tr>
+        </thead>
+        <tbody>
+          <tr data-crop="Rice" data-market="Abakaliki Rice Mill Market" data-price="850000">
+            <td>Rice</td><td>Abakaliki Rice Mill Market</td><td class="price">₦850,000</td><td>Ton</td><td class="small muted">28 Aug 2026</td></tr>
+          <tr data-crop="Rice" data-market="Abakaliki Main Market" data-price="42000">
+            <td>Rice</td><td>Abakaliki Main Market</td><td class="price">₦42,000</td><td>50kg Bag</td><td class="small muted">28 Aug 2026</td></tr>
+          <tr data-crop="Cassava" data-market="Afikpo Market" data-price="450000">
+            <td>Cassava</td><td>Afikpo Market</td><td class="price">₦450,000</td><td>Ton</td><td class="small muted">27 Aug 2026</td></tr>
+          <tr data-crop="Cassava" data-market="Onueke Market" data-price="32000">
+            <td>Cassava (Garri)</td><td>Onueke Market</td><td class="price">₦32,000</td><td>50kg Bag</td><td class="small muted">27 Aug 2026</td></tr>
+          <tr data-crop="Yam" data-market="Onueke Market" data-price="3200">
+            <td>Yam</td><td>Onueke Market</td><td class="price">₦3,200</td><td>Tuber</td><td class="small muted">26 Aug 2026</td></tr>
+          <tr data-crop="Yam" data-market="Abakaliki Main Market" data-price="3600">
+            <td>Yam</td><td>Abakaliki Main Market</td><td class="price">₦3,600</td><td>Tuber</td><td class="small muted">26 Aug 2026</td></tr>
+          <tr data-crop="Maize" data-market="Afikpo Market" data-price="38000">
+            <td>Maize</td><td>Afikpo Market</td><td class="price">₦38,000</td><td>100kg Bag</td><td class="small muted">25 Aug 2026</td></tr>
+          <tr data-crop="Maize" data-market="Abakaliki Main Market" data-price="40000">
+            <td>Maize</td><td>Abakaliki Main Market</td><td class="price">₦40,000</td><td>100kg Bag</td><td class="small muted">25 Aug 2026</td></tr>
+          <tr data-crop="Vegetables" data-market="Abakaliki Main Market" data-price="700">
+            <td>Vegetables (Ugu)</td><td>Abakaliki Main Market</td><td class="price">₦700</td><td>Bunch</td><td class="small muted">28 Aug 2026</td></tr>
+          <tr data-crop="Vegetables" data-market="Afikpo Market" data-price="18000">
+            <td>Vegetables (Tomatoes)</td><td>Afikpo Market</td><td class="price">₦18,000</td><td>Basket</td><td class="small muted">28 Aug 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="muted small" style="margin-top:16px">Prices change often. Always confirm with your local market before selling.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><h4>AgroLink Ebonyi</h4><p class="small">Connecting Ebonyi Farmers to Better Markets.</p></div>
+      <div><h4>Pages</h4>
+        <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
+        <a href="list-produce.html">List Your Produce</a><a href="prices.html">Market Prices</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>

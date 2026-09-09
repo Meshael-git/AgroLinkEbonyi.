@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard — AgroLink Ebonyi</title>
+<meta name="description" content="Administrator view of every produce listing and every order recorded on AgroLink Ebonyi." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">AgroLink <span>Ebonyi</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="prices.html">Market Prices</a>
+      <a href="weather.html">Weather</a>
+      <a href="directory.html">Directory</a>
+      <a href="contact.html">Contact</a>
+      <a href="list-produce.html" class="btn-nav">List Your Produce</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    <p>All products and transactions on the platform.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container" id="adminBody">
+    <div class="stat-card" style="max-width:280px">
+      <div class="stat-number" id="adminTotal">₦0</div>
+      <div class="stat-label">Total value of orders</div>
+    </div>
+
+    <h2 style="margin-top:30px">All Products</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Crop</th><th>Farmer</th><th>Quantity</th><th>Price</th><th>LGA</th><th>Added</th></tr></thead>
+        <tbody id="adminListings"></tbody>
+      </table>
+    </div>
+
+    <h2 style="margin-top:34px">All Transactions</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Crop</th><th>Buyer</th><th>Quantity</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="adminOrders"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">© 2026 AgroLink Ebonyi — Student Project</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="agrolink.js"></script>
+</body>
+</html>
