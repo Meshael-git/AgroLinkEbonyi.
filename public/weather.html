@@ -59,6 +59,31 @@
       <code>WEATHER_API_KEY</code> in <code>script.js</code> — never publish a real secret key.
       If the request fails, realistic demo weather data is shown instead.
     </p> -->
+    <div class="season-box">
+<h3>What Can I Plant Now?</h3>
+<p class="small muted">New to farming? Pick a month and see crops that usually do well in Ebonyi State at that time.</p>
+<div class="season-controls">
+<label for="seasonMonth" class="small">Choose a month:</label>
+<select id="seasonMonth" onchange="showSeasonCrops()">
+<option value="0">January</option>
+<option value="1">February</option>
+<option value="2">March</option>
+<option value="3">April</option>
+<option value="4">May</option>
+<option value="5">June</option>
+<option value="6">July</option>
+<option value="7">August</option>
+<option value="8">September</option>
+<option value="9">October</option>
+<option value="10">November</option>
+<option value="11">December</option>
+</select>
+</div>
+<h4 id="seasonTitle" style="margin-top:16px">Season</h4>
+<p class="small" id="seasonNote"></p>
+<ul class="crop-list" id="seasonCrops"></ul>
+<p class="small muted" style="margin-top:12px">This is general guidance for learning purposes. Always confirm with your local extension officer before buying seeds.</p>
+    </div>
   </div>
 </section>
 
