@@ -81,6 +81,34 @@ function closeDetails() {
   document.getElementById("detailsModal").classList.add("hidden");
 }
 
+/* ---------- Account access ---------- */
+function showAuthForm(mode) {
+  var loginForm = document.getElementById("loginForm");
+  var registerForm = document.getElementById("registerForm");
+  var loginTab = document.getElementById("loginTab");
+  var registerTab = document.getElementById("registerTab");
+  var message = document.getElementById("authMessage");
+  if (!loginForm || !registerForm) return;
+  var isLogin = mode === "login";
+  loginForm.classList.toggle("hidden", !isLogin);
+  registerForm.classList.toggle("hidden", isLogin);
+  loginTab.classList.toggle("active", isLogin);
+  registerTab.classList.toggle("active", !isLogin);
+  loginTab.setAttribute("aria-selected", String(isLogin));
+  registerTab.setAttribute("aria-selected", String(!isLogin));
+  if (message) { message.textContent = ""; message.className = "small"; }
+}
+
+function togglePassword(inputId, button) {
+  var input = document.getElementById(inputId);
+  if (!input) return;
+  var isHidden = input.type === "password";
+  input.type = isHidden ? "text" : "password";
+  button.textContent = isHidden ? "Hide" : "Show";
+  button.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+  button.title = isHidden ? "Hide password" : "Show password";
+}
+
 /* ---------- 4. Form validation + success messages ---------- */
 function handleProduceForm(event) {
   event.preventDefault();
@@ -236,3 +264,72 @@ function loadWeather() {
 }
 
 document.addEventListener("DOMContentLoaded", loadWeather);
+
+/* ---------- 8. Season crop guide (for beginner farmers) ---------- */
+/* Simple educational guide for Ebonyi State's two main seasons. */
+var cropCalendar = [
+  { months: [2, 3], season: "Early Rainy Season (March - April)",
+    note: "First rains soften the soil. Prepare ridges and plant early.",
+    crops: [
+      { name: "Maize", tip: "Plant with the first steady rains; harvest green maize in about 3 months." },
+      { name: "Yam", tip: "Plant seed yams on ridges and stake them as the vines grow." },
+      { name: "Cassava", tip: "Plant healthy stem cuttings at an angle; very forgiving for beginners." },
+      { name: "Melon (Egusi)", tip: "Plant between yam or maize rows to cover the soil and stop weeds." }
+    ] },
+  { months: [4, 5, 6], season: "Peak Rainy Season (May - July)",
+    note: "Heavy, reliable rainfall. Best time for water-loving crops.",
+    crops: [
+      { name: "Rice", tip: "Abakaliki's main crop. Use lowland/fadama plots that hold water." },
+      { name: "Fluted Pumpkin (Ugu)", tip: "Fast money crop. You can start cutting leaves after 5-6 weeks." },
+      { name: "Okra", tip: "Matures in about 2 months and sells quickly in local markets." },
+      { name: "Cocoyam", tip: "Does well in shaded, moist soil with little extra care." }
+    ] },
+  { months: [7, 8, 9], season: "Late Rainy Season (August - October)",
+    note: "Rain is reducing. Plant short-cycle crops and start harvesting.",
+    crops: [
+      { name: "Cowpea (Beans)", tip: "Short cycle and improves your soil for next season." },
+      { name: "Groundnut", tip: "Needs drier weather near harvest, so late rains suit it." },
+      { name: "Late Maize", tip: "A second maize round is possible if rain is still steady in August." },
+      { name: "Vegetables", tip: "Keep planting ugu, water leaf and okra for steady weekly income." }
+    ] },
+  { months: [10, 11, 0, 1], season: "Dry Season (November - February)",
+    note: "Little or no rain. You need irrigation or a water source nearby.",
+    crops: [
+      { name: "Dry-season Rice", tip: "Only on fadama land close to a stream or with irrigation." },
+      { name: "Tomato & Pepper", tip: "High prices in the dry season; water in the morning and evening." },
+      { name: "Onion", tip: "Needs full sunshine and steady watering; stores well after harvest." },
+      { name: "Yam (planting)", tip: "December to January is the traditional time to plant seed yams." }
+    ] }
+];
+
+function seasonForMonth(monthIndex) {
+  for (var i = 0; i < cropCalendar.length; i++) {
+    if (cropCalendar[i].months.indexOf(monthIndex) !== -1) return cropCalendar[i];
+  }
+  return cropCalendar[0];
+}
+
+function showSeasonCrops() {
+  var picker = document.getElementById("seasonMonth");
+  if (!picker) return;
+  var monthIndex = Number(picker.value);
+  var info = seasonForMonth(monthIndex);
+
+  document.getElementById("seasonTitle").textContent = info.season;
+  document.getElementById("seasonNote").textContent = info.note;
+
+  var html = "";
+  for (var i = 0; i < info.crops.length; i++) {
+    html += "<li><strong>" + info.crops[i].name + "</strong><span>" + info.crops[i].tip + "</span></li>";
+  }
+  document.getElementById("seasonCrops").innerHTML = html;
+}
+
+function loadSeasonGuide() {
+  var picker = document.getElementById("seasonMonth");
+  if (!picker) return;
+  picker.value = String(new Date().getMonth());
+  showSeasonCrops();
+}
+
+document.addEventListener("DOMContentLoaded", loadSeasonGuide);
