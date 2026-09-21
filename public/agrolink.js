@@ -301,27 +301,73 @@ async function loadAccount() {
   if (listings.data && listings.data.length) {
     for (var i = 0; i < listings.data.length; i++) {
       var l = listings.data[i];
-      listHtml += "<tr><td>" + l.crop_type + "</td><td>" + l.quantity + " " + l.unit + "</td><td>" + money(l.price) + "</td><td>" + l.lga + "</td><td>" + l.status + "</td></tr>";
+      listHtml +=
+        "<tr><td>" + escapeText(l.crop_type) + "</td><td>" + escapeText(l.quantity) + " " + escapeText(l.unit) +
+        "</td><td>" + money(l.price) + "</td><td>" + escapeText(l.lga) + "</td><td>" + escapeText(l.status) + "</td>" +
+        '<td><button class="btn btn-danger btn-small" onclick="deleteListing(\'' + escapeText(l.id) + "')\">Delete</button></td></tr>";
     }
   } else {
-    listHtml = '<tr><td colspan="5" class="muted">No produce listed yet.</td></tr>';
+    listHtml = '<tr><td colspan="6" class="muted">No produce listed yet.</td></tr>';
   }
   document.getElementById("myListings").innerHTML = listHtml;
 
-  var orders = await db.from("orders").select("*, listings(crop_type, unit, farmer_name)").order("created_at", { ascending: false });
+  /* Orders I placed as a buyer */
+  var orders = await db
+    .from("orders")
+    .select("*, listings(crop_type, unit, farmer_name)")
+    .eq("buyer_id", currentUser.id)
+    .order("created_at", { ascending: false });
   var orderHtml = "";
   if (orders.data && orders.data.length) {
     for (var j = 0; j < orders.data.length; j++) {
       var o = orders.data[j];
       orderHtml +=
-        "<tr><td>" + (o.listings ? o.listings.crop_type : "-") + "</td><td>" + o.quantity + "</td><td>" +
-        money(o.total_price) + "</td><td>" + o.status + "</td><td>" + new Date(o.created_at).toLocaleDateString() + "</td></tr>";
+        "<tr><td>" + escapeText(o.listings ? o.listings.crop_type : "-") + "</td><td>" + escapeText(o.quantity) + "</td><td>" +
+        money(o.total_price) + "</td><td>" + escapeText(o.status) + "</td><td>" + new Date(o.created_at).toLocaleDateString() + "</td></tr>";
     }
   } else {
-    orderHtml = '<tr><td colspan="5" class="muted">No orders yet.</td></tr>';
+    orderHtml = '<tr><td colspan="5" class="muted">No purchases yet.</td></tr>';
   }
   document.getElementById("myOrders").innerHTML = orderHtml;
+
+  /* Orders buyers placed on MY produce - farmer sees the buyer phone number */
+  var received = await db
+    .from("orders")
+    .select("*, listings!inner(crop_type, unit, farmer_id)")
+    .eq("listings.farmer_id", currentUser.id)
+    .order("created_at", { ascending: false });
+
+  var recHtml = "";
+  if (received.data && received.data.length) {
+    for (var k = 0; k < received.data.length; k++) {
+      var r = received.data[k];
+      var phone = r.buyer_phone ? String(r.buyer_phone).trim() : "";
+      var phoneCell = phone
+        ? '<a href="tel:' + escapeText(phone) + '">' + escapeText(phone) + "</a>"
+        : '<span class="muted">Not provided</span>';
+      recHtml +=
+        "<tr><td>" + escapeText(r.listings ? r.listings.crop_type : "-") + "</td><td>" + escapeText(r.buyer_name || "Buyer") +
+        "</td><td>" + phoneCell + "</td><td>" + escapeText(r.quantity) + "</td><td>" + money(r.total_price) +
+        "</td><td>" + new Date(r.created_at).toLocaleDateString() + "</td></tr>";
+    }
+  } else {
+    recHtml = '<tr><td colspan="6" class="muted">No buyer requests yet.</td></tr>';
+  }
+  var recBody = document.getElementById("receivedOrders");
+  if (recBody) recBody.innerHTML = recHtml;
 }
+
+/* ---------- Delete one of my listings ---------- */
+async function deleteListing(id) {
+  if (!window.confirm("Remove this produce listing from the marketplace?")) return;
+  var result = await db.from("listings").delete().eq("id", id);
+  if (result.error) {
+    window.alert("Could not delete: " + result.error.message);
+    return;
+  }
+  loadAccount();
+}
+
 
 /* ---------- Admin dashboard ---------- */
 async function loadAdmin() {
