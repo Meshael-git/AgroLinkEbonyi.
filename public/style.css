@@ -116,7 +116,7 @@ a { color: var(--green-dark); }
 .hero {
   background:
     linear-gradient(rgba(10, 40, 20, 0.62), rgba(10, 40, 20, 0.62)),
-    url("img/hero.jpg")
+    url("https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=70")
       center/cover no-repeat;
   color: #fff;
   padding: 80px 0;
@@ -211,7 +211,7 @@ section { padding: 48px 0; }
 .filters input, .filters select, .filters button { font-family: inherit; }
 
 input[type="text"], input[type="tel"], input[type="email"], input[type="number"],
-input[type="date"], input[type="search"], select, textarea {
+input[type="date"], input[type="search"], input[type="password"], select, textarea {
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -237,6 +237,30 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--green-light
 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .form-field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
 .form-full { grid-column: 1 / -1; }
+
+.auth-page { min-height: calc(100vh - 66px); padding: 56px 20px 72px; background: #f6f8f6; }
+.auth-shell { width: 100%; max-width: 430px; margin: 0 auto; }
+.auth-heading { text-align: center; margin-bottom: 24px; }
+.auth-heading h1 { font-size: 28px; margin-bottom: 6px; }
+.auth-heading p { color: var(--muted); }
+.auth-mark { display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 58px; margin-bottom: 12px; border-radius: 16px; background: var(--green); color: #fff; font-size: 28px; box-shadow: 0 10px 24px rgba(29, 122, 62, 0.2); }
+.auth-panel { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 14px 38px rgba(20, 45, 29, 0.08); }
+.auth-tabs { display: flex; gap: 4px; padding: 4px; margin-bottom: 26px; border-radius: 10px; background: #f1f4f2; }
+.auth-tab { flex: 1; border: 0; border-radius: 7px; padding: 10px 8px; background: transparent; color: var(--muted); font: 600 14px inherit; cursor: pointer; }
+.auth-tab.active { background: #fff; color: var(--green-dark); box-shadow: 0 2px 8px rgba(20, 45, 29, 0.1); }
+.auth-form { display: grid; gap: 17px; animation: auth-in 0.2s ease; }
+.auth-form-title p { margin: 0; color: var(--muted); font-size: 14px; }
+.auth-form-title h2 { font-size: 22px; margin-bottom: 5px; }
+.auth-form input, .auth-form select { min-height: 46px; background: #fafcfb; }
+.password-field { position: relative; }
+.password-field input { padding-right: 66px; }
+.password-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: 0; background: transparent; color: var(--green-dark); font: 600 13px inherit; cursor: pointer; padding: 7px; }
+.auth-submit { width: 100%; min-height: 48px; font-weight: 600; }
+.auth-switch { text-align: center; color: var(--muted); font-size: 14px; margin: 0; }
+.auth-switch button { border: 0; padding: 0; background: transparent; color: var(--green-dark); font: 600 14px inherit; cursor: pointer; text-decoration: underline; }
+.btn-danger { color: #9b1c1c; background: #fff; border-color: #dfaaa7; }
+.btn-danger:hover { background: #fdecec; }
+@keyframes auth-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
 .success-message {
   background: var(--green-light);
@@ -350,8 +374,20 @@ tr:last-child td { border-bottom: none; }
   }
   .nav-links.open { display: flex; }
   .navbar { position: relative; }
+  .auth-page { padding: 34px 16px 52px; }
+  .auth-panel { padding: 20px; }
 }
 
 /* Make sure hidden always wins over display rules like .modal */
 .modal.hidden,
 .hidden { display: none !important; }
+
+/* ---------- Season crop guide ---------- */
+.season-box { background: var(--green-light); border: 1px solid #bcdfc8; border-radius: 12px; padding: 18px; margin-top: 18px; }
+.season-box h3 { margin-bottom: 6px; }
+.season-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 14px; }
+.season-controls select { min-height: 44px; max-width: 260px; }
+.crop-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; }
+.crop-list li { background: #fff; border: 1px solid #e2e8e4; border-radius: 10px; padding: 12px 14px; }
+.crop-list strong { display: block; color: var(--green-dark); }
+.crop-list span { font-size: 14px; color: var(--muted); }
