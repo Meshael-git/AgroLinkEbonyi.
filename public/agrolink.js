@@ -511,7 +511,7 @@ async function deleteMessage(id) {
 }
 
 /* ---------- Market prices ---------- */
-function trendMark(trend) {
+function trendMark() {
   if (trend === "up") return '<span class="up">↑</span>';
   if (trend === "down") return '<span class="down">↓</span>';
   return '<span class="same">→</span>';
