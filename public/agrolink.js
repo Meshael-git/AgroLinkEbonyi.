@@ -387,11 +387,13 @@ async function loadAdmin() {
   if (listings.data && listings.data.length) {
     for (var i = 0; i < listings.data.length; i++) {
       var l = listings.data[i];
-      rows += "<tr><td>" + l.crop_type + "</td><td>" + l.farmer_name + "</td><td>" + l.quantity + " " + l.unit +
-        "</td><td>" + money(l.price) + "</td><td>" + l.lga + "</td><td>" + new Date(l.created_at).toLocaleDateString() + "</td></tr>";
+      rows += "<tr><td>" + escapeText(l.crop_type) + "</td><td>" + escapeText(l.farmer_name) + "</td><td>" +
+        escapeText(l.quantity) + " " + escapeText(l.unit) + "</td><td>" + money(l.price) + "</td><td>" +
+        escapeText(l.lga) + "</td><td>" + new Date(l.created_at).toLocaleDateString() + "</td>" +
+        '<td><button class="btn btn-danger btn-small" onclick="adminDeleteListing(\'' + escapeText(l.id) + "')\">Delete</button></td></tr>";
     }
   } else {
-    rows = '<tr><td colspan="6" class="muted">No products yet.</td></tr>';
+    rows = '<tr><td colspan="7" class="muted">No products yet.</td></tr>';
   }
   document.getElementById("adminListings").innerHTML = rows;
 
@@ -402,8 +404,8 @@ async function loadAdmin() {
     for (var j = 0; j < orders.data.length; j++) {
       var o = orders.data[j];
       total += Number(o.total_price);
-      orderRows += "<tr><td>" + (o.listings ? o.listings.crop_type : "-") + "</td><td>" + o.buyer_name + "</td><td>" +
-        o.quantity + "</td><td>" + money(o.total_price) + "</td><td>" + o.status + "</td><td>" +
+      orderRows += "<tr><td>" + escapeText(o.listings ? o.listings.crop_type : "-") + "</td><td>" + escapeText(o.buyer_name) + "</td><td>" +
+        escapeText(o.quantity) + "</td><td>" + money(o.total_price) + "</td><td>" + escapeText(o.status) + "</td><td>" +
         new Date(o.created_at).toLocaleDateString() + "</td></tr>";
     }
   } else {
@@ -411,6 +413,198 @@ async function loadAdmin() {
   }
   document.getElementById("adminOrders").innerHTML = orderRows;
   document.getElementById("adminTotal").textContent = money(total);
+
+  loadAdminMessages();
+  loadAdminPrices();
+}
+
+/* Admin removes any product */
+async function adminDeleteListing(id) {
+  if (!window.confirm("Delete this product from the marketplace?")) return;
+  var result = await db.from("listings").delete().eq("id", id);
+  if (result.error) {
+    window.alert("Could not delete: " + result.error.message);
+    return;
+  }
+  loadAdmin();
+}
+
+/* ---------- Contact form -> inbox ---------- */
+async function submitContact(event) {
+  event.preventDefault();
+  var form = event.target;
+  var box = document.getElementById("contactSuccess");
+  var button = form.querySelector("button[type=submit]");
+
+  button.disabled = true;
+  button.textContent = "Sending...";
+
+  function fieldValue(id) {
+    var el = document.getElementById(id);
+    return el ? String(el.value).trim() : "";
+  }
+
+  var insert = await db.from("contact_messages").insert({
+    name: fieldValue("name"),
+    organization: fieldValue("organization"),
+    email: fieldValue("email"),
+    phone: fieldValue("contactPhone"),
+    partnership_type: fieldValue("partnershipType"),
+    message: fieldValue("message")
+  });
+
+  button.disabled = false;
+  button.textContent = "Send Message";
+
+  if (insert.error) {
+    box.textContent = "Could not send: " + insert.error.message;
+    box.className = "error-message";
+    return;
+  }
+  form.reset();
+  box.textContent = "Thank you — your message has been sent to the AgroLink team.";
+  box.className = "success-message";
+}
+
+/* ---------- Admin inbox ---------- */
+async function loadAdminMessages() {
+  var body = document.getElementById("adminMessages");
+  if (!body) return;
+
+  var result = await db.from("contact_messages").select("*").order("created_at", { ascending: false });
+  var html = "";
+  var unread = 0;
+
+  if (result.data && result.data.length) {
+    for (var i = 0; i < result.data.length; i++) {
+      var m = result.data[i];
+      if (!m.is_read) unread++;
+      var phone = m.phone ? '<a href="tel:' + escapeText(m.phone) + '">' + escapeText(m.phone) + "</a>" : '<span class="muted">-</span>';
+      html +=
+        '<tr style="' + (m.is_read ? "" : "font-weight:600") + '">' +
+        "<td>" + new Date(m.created_at).toLocaleDateString() + "</td>" +
+        "<td>" + escapeText(m.name) + (m.organization ? '<br /><span class="small muted">' + escapeText(m.organization) + "</span>" : "") + "</td>" +
+        '<td><a href="mailto:' + escapeText(m.email) + '">' + escapeText(m.email) + "</a><br />" + phone + "</td>" +
+        "<td>" + escapeText(m.partnership_type) + "</td>" +
+        "<td>" + escapeText(m.message) + "</td>" +
+        '<td><button class="btn btn-outline btn-small" onclick="markMessageRead(\'' + escapeText(m.id) + '\')">' +
+        (m.is_read ? "Read" : "Mark read") + "</button> " +
+        '<button class="btn btn-danger btn-small" onclick="deleteMessage(\'' + escapeText(m.id) + "')\">Delete</button></td></tr>";
+    }
+  } else {
+    html = '<tr><td colspan="6" class="muted">No messages yet.</td></tr>';
+  }
+  body.innerHTML = html;
+  var counter = document.getElementById("adminUnread");
+  if (counter) counter.textContent = unread;
+}
+
+async function markMessageRead(id) {
+  await db.from("contact_messages").update({ is_read: true }).eq("id", id);
+  loadAdminMessages();
+}
+
+async function deleteMessage(id) {
+  if (!window.confirm("Delete this message?")) return;
+  await db.from("contact_messages").delete().eq("id", id);
+  loadAdminMessages();
+}
+
+/* ---------- Market prices ---------- */
+function trendMark(trend) {
+  if (trend === "up") return '<span class="up">↑</span>';
+  if (trend === "down") return '<span class="down">↓</span>';
+  return '<span class="same">→</span>';
+}
+
+async function loadPrices() {
+  var body = document.getElementById("priceRows");
+  if (!body) return;
+
+  var result = await db.from("market_prices").select("*").order("crop", { ascending: true });
+  if (result.error || !result.data || !result.data.length) return;
+
+  var html = "";
+  for (var i = 0; i < result.data.length; i++) {
+    var p = result.data[i];
+    html +=
+      '<tr data-crop="' + escapeText(p.crop) + '" data-market="' + escapeText(p.market) + '" data-price="' + escapeText(p.price) + '">' +
+      "<td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td>" +
+      '<td class="price">' + money(p.price) + "</td><td>" + escapeText(p.unit) + "</td>" +
+      "<td>" + trendMark(p.trend) + "</td>" +
+      '<td class="small muted">' + new Date(p.updated_at).toLocaleDateString() + "</td></tr>";
+  }
+  body.innerHTML = html;
+  if (typeof filterPrices === "function") filterPrices();
+}
+
+async function loadAdminPrices() {
+  var body = document.getElementById("adminPrices");
+  if (!body) return;
+
+  var result = await db.from("market_prices").select("*").order("crop", { ascending: true });
+  var html = "";
+  if (result.data && result.data.length) {
+    for (var i = 0; i < result.data.length; i++) {
+      var p = result.data[i];
+      html +=
+        "<tr><td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td><td>" + money(p.price) +
+        "</td><td>" + escapeText(p.unit) + "</td><td>" + trendMark(p.trend) + "</td><td>" +
+        new Date(p.updated_at).toLocaleDateString() + "</td>" +
+        '<td><button class="btn btn-outline btn-small" onclick="editPrice(\'' + escapeText(p.id) + "', " + Number(p.price) + ')">New price</button> ' +
+        '<button class="btn btn-danger btn-small" onclick="deletePrice(\'' + escapeText(p.id) + "')\">Delete</button></td></tr>";
+    }
+  } else {
+    html = '<tr><td colspan="7" class="muted">No prices yet.</td></tr>';
+  }
+  body.innerHTML = html;
+}
+
+async function addPrice(event) {
+  event.preventDefault();
+  var form = event.target;
+  var box = document.getElementById("priceMessage");
+
+  var insert = await db.from("market_prices").insert({
+    crop: form.crop.value.trim(),
+    market: form.market.value.trim(),
+    price: Number(form.price.value),
+    unit: form.unit.value.trim(),
+    trend: form.trend.value,
+    updated_at: new Date().toISOString()
+  });
+
+  if (insert.error) {
+    box.textContent = insert.error.message;
+    box.className = "error-message";
+    return;
+  }
+  form.reset();
+  box.textContent = "Price added. It is now live on the Market Prices page.";
+  box.className = "success-message";
+  loadAdminPrices();
+}
+
+async function editPrice(id, current) {
+  var value = window.prompt("Enter the new price in Naira:", current);
+  if (value === null) return;
+  var amount = Number(value);
+  if (!amount || amount <= 0) {
+    window.alert("Please enter a valid amount.");
+    return;
+  }
+  var update = await db.from("market_prices").update({ price: amount, updated_at: new Date().toISOString() }).eq("id", id);
+  if (update.error) {
+    window.alert("Could not update: " + update.error.message);
+    return;
+  }
+  loadAdminPrices();
+}
+
+async function deletePrice(id) {
+  if (!window.confirm("Delete this price entry?")) return;
+  await db.from("market_prices").delete().eq("id", id);
+  loadAdminPrices();
 }
 
 /* ---------- Start ---------- */
@@ -419,4 +613,5 @@ document.addEventListener("DOMContentLoaded", async function () {
   loadMarketplace();
   loadAccount();
   loadAdmin();
+  loadPrices();
 });
