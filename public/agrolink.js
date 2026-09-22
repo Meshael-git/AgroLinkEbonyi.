@@ -511,9 +511,9 @@ async function deleteMessage(id) {
 }
 
 /* ---------- Market prices ---------- */
-function trendMark() {
-  if (trend === "up") return '<span class="up">↑</span>';
-  if (trend === "down") return '<span class="down">↓</span>';
+function trendMark(trend) {
+  if (trend === "up") return '';
+  if (trend === "down") return '';
   return '<span class="same">→</span>';
 }
 
@@ -531,7 +531,7 @@ async function loadPrices() {
       '<tr data-crop="' + escapeText(p.crop) + '" data-market="' + escapeText(p.market) + '" data-price="' + escapeText(p.price) + '">' +
       "<td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td>" +
       '<td class="price">' + money(p.price) + "</td><td>" + escapeText(p.unit) + "</td>" +
-      "<td>" + trendMark(p.trend) + "</td>" +
+     
       '<td class="small muted">' + new Date(p.updated_at).toLocaleDateString() + "</td></tr>";
   }
   body.innerHTML = html;
@@ -549,7 +549,7 @@ async function loadAdminPrices() {
       var p = result.data[i];
       html +=
         "<tr><td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td><td>" + money(p.price) +
-        "</td><td>" + escapeText(p.unit) + "</td><td>" + trendMark(p.trend) + "</td><td>" +
+        "</td><td>" + escapeText(p.unit) + "</td><td>" +
         new Date(p.updated_at).toLocaleDateString() + "</td>" +
         '<td><button class="btn btn-outline btn-small" onclick="editPrice(\'' + escapeText(p.id) + "', " + Number(p.price) + ')">New price</button> ' +
         '<button class="btn btn-danger btn-small" onclick="deletePrice(\'' + escapeText(p.id) + "')\">Delete</button></td></tr>";
