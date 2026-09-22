@@ -63,7 +63,7 @@ function openDetails(button) {
     "<p><strong>Farmer:</strong> " + card.getAttribute("data-farmer") + "</p>" +
     "<p><strong>Location:</strong> " + card.getAttribute("data-location") + "</p>" +
     "<p><strong>Harvested:</strong> " + card.getAttribute("data-harvest") + "</p>" +
-    "<p><strong>Contact (demo):</strong> " + card.getAttribute("data-contact") + "</p>" +
+    "<p><strong>Contact:</strong> " + card.getAttribute("data-contact") + "</p>" +
     "<p class='muted small'>" + card.getAttribute("data-note") + "</p>";
   var idField = document.getElementById("orderListingId");
   if (idField) {
