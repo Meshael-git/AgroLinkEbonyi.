@@ -303,8 +303,10 @@ async function loadAccount() {
       var l = listings.data[i];
       listHtml +=
         "<tr><td>" + escapeText(l.crop_type) + "</td><td>" + escapeText(l.quantity) + " " + escapeText(l.unit) +
-        "</td><td>" + money(l.price) + "</td><td>" + escapeText(l.lga) + "</td><td>" + escapeText(l.status) + "</td>" +
+        "</td><td>" + money(l.price) + "</td><td>" + escapeText(l.lga) + "</td><td>" +
+        (l.status === "sold" ? '<span class="status-sold">Sold</span>' : '<span class="status-pending">Available</span>') + "</td>" +
         '<td><button class="btn btn-danger btn-small" onclick="deleteListing(\'' + escapeText(l.id) + "')\">Delete</button></td></tr>";
+
     }
   } else {
     listHtml = '<tr><td colspan="6" class="muted">No produce listed yet.</td></tr>';
@@ -323,7 +325,10 @@ async function loadAccount() {
       var o = orders.data[j];
       orderHtml +=
         "<tr><td>" + escapeText(o.listings ? o.listings.crop_type : "-") + "</td><td>" + escapeText(o.quantity) + "</td><td>" +
-        money(o.total_price) + "</td><td>" + escapeText(o.status) + "</td><td>" + new Date(o.created_at).toLocaleDateString() + "</td></tr>";
+        money(o.total_price) + "</td><td>" +
+        (o.status === "completed" ? '<span class="status-sold">Sold</span>' : '<span class="status-pending">Pending</span>') +
+        "</td><td>" + new Date(o.created_at).toLocaleDateString() + "</td></tr>";
+
     }
   } else {
     orderHtml = '<tr><td colspan="5" class="muted">No purchases yet.</td></tr>';
@@ -333,7 +338,7 @@ async function loadAccount() {
   /* Orders buyers placed on MY produce - farmer sees the buyer phone number */
   var received = await db
     .from("orders")
-    .select("*, listings!inner(crop_type, unit, farmer_id)")
+    .select("*, listings!inner(id, crop_type, unit, farmer_id, status)")
     .eq("listings.farmer_id", currentUser.id)
     .order("created_at", { ascending: false });
 
@@ -345,17 +350,40 @@ async function loadAccount() {
       var phoneCell = phone
         ? '<a href="tel:' + escapeText(phone) + '">' + escapeText(phone) + "</a>"
         : '<span class="muted">Not provided</span>';
+      var done = r.status === "completed";
+      var statusCell = done ? '<span class="status-sold">Sold</span>' : '<span class="status-pending">Pending</span>';
+      var actionCell = done
+        ? '<span class="muted small">Completed</span>'
+        : '<button class="btn btn-primary btn-small" onclick="markOrderSold(\'' + escapeText(r.id) + "', '" +
+          escapeText(r.listings ? r.listings.id : "") + '\')">Mark as sold</button>';
       recHtml +=
         "<tr><td>" + escapeText(r.listings ? r.listings.crop_type : "-") + "</td><td>" + escapeText(r.buyer_name || "Buyer") +
         "</td><td>" + phoneCell + "</td><td>" + escapeText(r.quantity) + "</td><td>" + money(r.total_price) +
-        "</td><td>" + new Date(r.created_at).toLocaleDateString() + "</td></tr>";
+        "</td><td>" + statusCell + "</td><td>" + new Date(r.created_at).toLocaleDateString() +
+        "</td><td>" + actionCell + "</td></tr>";
     }
   } else {
-    recHtml = '<tr><td colspan="6" class="muted">No buyer requests yet.</td></tr>';
+    recHtml = '<tr><td colspan="8" class="muted">No buyer requests yet.</td></tr>';
   }
   var recBody = document.getElementById("receivedOrders");
   if (recBody) recBody.innerHTML = recHtml;
 }
+
+/* ---------- Farmer completes a sale ---------- */
+async function markOrderSold(orderId, listingId) {
+  if (!window.confirm("Mark this sale as completed? The produce will be shown as sold.")) return;
+
+  var orderUpdate = await db.from("orders").update({ status: "completed" }).eq("id", orderId);
+  if (orderUpdate.error) {
+    window.alert("Could not update: " + orderUpdate.error.message);
+    return;
+  }
+  if (listingId) {
+    await db.from("listings").update({ status: "sold" }).eq("id", listingId);
+  }
+  loadAccount();
+}
+
 
 /* ---------- Delete one of my listings ---------- */
 async function deleteListing(id) {
@@ -387,30 +415,45 @@ async function loadAdmin() {
   if (listings.data && listings.data.length) {
     for (var i = 0; i < listings.data.length; i++) {
       var l = listings.data[i];
-      rows += "<tr><td>" + escapeText(l.crop_type) + "</td><td>" + escapeText(l.farmer_name) + "</td><td>" +
+      var fPhone = l.phone ? String(l.phone).trim() : "";
+      var fPhoneCell = fPhone
+        ? '<a href="tel:' + escapeText(fPhone) + '">' + escapeText(fPhone) + "</a>"
+        : '<span class="muted">Not provided</span>';
+      var listSold = l.status === "sold";
+      rows += "<tr><td>" + escapeText(l.crop_type) + "</td><td>" + escapeText(l.farmer_name) + "</td><td>" + fPhoneCell + "</td><td>" +
         escapeText(l.quantity) + " " + escapeText(l.unit) + "</td><td>" + money(l.price) + "</td><td>" +
-        escapeText(l.lga) + "</td><td>" + new Date(l.created_at).toLocaleDateString() + "</td>" +
+        escapeText(l.lga) + "</td><td>" +
+        (listSold ? '<span class="status-sold">Sold</span>' : '<span class="status-pending">Available</span>') +
+        "</td><td>" + new Date(l.created_at).toLocaleDateString() + "</td>" +
         '<td><button class="btn btn-danger btn-small" onclick="adminDeleteListing(\'' + escapeText(l.id) + "')\">Delete</button></td></tr>";
     }
   } else {
-    rows = '<tr><td colspan="7" class="muted">No products yet.</td></tr>';
+    rows = '<tr><td colspan="9" class="muted">No products yet.</td></tr>';
   }
+
   document.getElementById("adminListings").innerHTML = rows;
 
-  var orders = await db.from("orders").select("*, listings(crop_type, farmer_name)").order("created_at", { ascending: false });
+  var orders = await db.from("orders").select("*, listings(crop_type, farmer_name, phone)").order("created_at", { ascending: false });
   var orderRows = "";
   var total = 0;
   if (orders.data && orders.data.length) {
     for (var j = 0; j < orders.data.length; j++) {
       var o = orders.data[j];
       total += Number(o.total_price);
-      orderRows += "<tr><td>" + escapeText(o.listings ? o.listings.crop_type : "-") + "</td><td>" + escapeText(o.buyer_name) + "</td><td>" +
-        escapeText(o.quantity) + "</td><td>" + money(o.total_price) + "</td><td>" + escapeText(o.status) + "</td><td>" +
+      var oSold = o.status === "completed";
+      var oFarmerPhone = o.listings && o.listings.phone ? String(o.listings.phone).trim() : "";
+      var oFarmerCell = escapeText(o.listings ? o.listings.farmer_name : "-") +
+        (oFarmerPhone ? '<br /><a class="small" href="tel:' + escapeText(oFarmerPhone) + '">' + escapeText(oFarmerPhone) + "</a>" : "");
+      orderRows += "<tr><td>" + escapeText(o.listings ? o.listings.crop_type : "-") + "</td><td>" + oFarmerCell + "</td><td>" +
+        escapeText(o.buyer_name) + "</td><td>" +
+        escapeText(o.quantity) + "</td><td>" + money(o.total_price) + "</td><td>" +
+        (oSold ? '<span class="status-sold">Sold</span>' : '<span class="status-pending">Pending</span>') + "</td><td>" +
         new Date(o.created_at).toLocaleDateString() + "</td></tr>";
     }
   } else {
-    orderRows = '<tr><td colspan="6" class="muted">No transactions yet.</td></tr>';
+    orderRows = '<tr><td colspan="7" class="muted">No transactions yet.</td></tr>';
   }
+
   document.getElementById("adminOrders").innerHTML = orderRows;
   document.getElementById("adminTotal").textContent = money(total);
 
@@ -454,15 +497,15 @@ async function submitContact(event) {
   });
 
   button.disabled = false;
-  button.textContent = "Send Message";
+  button.textContent = "Send Report";
 
   if (insert.error) {
-    box.textContent = "Could not send: " + insert.error.message;
+    box.textContent = "Could not send report: " + insert.error.message;
     box.className = "error-message";
     return;
   }
   form.reset();
-  box.textContent = "Thank you — your message has been sent to the AgroLink team.";
+  box.textContent = "Thank you — your report has been sent to the AgroLink team. We will look into it.";
   box.className = "success-message";
 }
 
@@ -512,8 +555,8 @@ async function deleteMessage(id) {
 
 /* ---------- Market prices ---------- */
 function trendMark(trend) {
-  if (trend === "up") return '';
-  if (trend === "down") return '';
+  if (trend === "up") return '<span class="up">↑</span>';
+  if (trend === "down") return '<span class="down">↓</span>';
   return '<span class="same">→</span>';
 }
 
@@ -531,7 +574,7 @@ async function loadPrices() {
       '<tr data-crop="' + escapeText(p.crop) + '" data-market="' + escapeText(p.market) + '" data-price="' + escapeText(p.price) + '">' +
       "<td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td>" +
       '<td class="price">' + money(p.price) + "</td><td>" + escapeText(p.unit) + "</td>" +
-     
+      "<td>" + trendMark(p.trend) + "</td>" +
       '<td class="small muted">' + new Date(p.updated_at).toLocaleDateString() + "</td></tr>";
   }
   body.innerHTML = html;
@@ -549,7 +592,7 @@ async function loadAdminPrices() {
       var p = result.data[i];
       html +=
         "<tr><td>" + escapeText(p.crop) + "</td><td>" + escapeText(p.market) + "</td><td>" + money(p.price) +
-        "</td><td>" + escapeText(p.unit) + "</td><td>" +
+        "</td><td>" + escapeText(p.unit) + "</td><td>" + trendMark(p.trend) + "</td><td>" +
         new Date(p.updated_at).toLocaleDateString() + "</td>" +
         '<td><button class="btn btn-outline btn-small" onclick="editPrice(\'' + escapeText(p.id) + "', " + Number(p.price) + ')">New price</button> ' +
         '<button class="btn btn-danger btn-small" onclick="deletePrice(\'' + escapeText(p.id) + "')\">Delete</button></td></tr>";
