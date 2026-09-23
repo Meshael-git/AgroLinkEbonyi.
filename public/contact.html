@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Partner With AgroLink Ebonyi — Contact</title>
-<meta name="description" content="Partner with AgroLink Ebonyi as a buyer, NGO, government body, cooperative or agricultural organisation." />
+<title>Report a Problem — AgroLink Ebonyi</title>
+<meta name="description" content="Report a scam, a fake produce listing, a dishonest buyer or seller, or any other problem you experienced on AgroLink Ebonyi." />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -19,7 +19,7 @@
       <a href="prices.html">Market Prices</a>
       <a href="weather.html">Weather</a>
       <a href="directory.html">Directory</a>
-      <a href="contact.html" class="active">Contact</a>
+      <a href="contact.html" class="active">Report a Problem</a>
       <a href="list-produce.html" class="btn-nav">List Your Product</a>
     </div>
   </div>
@@ -27,8 +27,8 @@
 
 <header class="page-header">
   <div class="container">
-    <h1>Partner With AgroLink Ebonyi</h1>
-    <p>We are building a stronger connection between farmers, buyers, cooperatives, NGOs and agricultural organisations.</p>
+    <h1>Report a Problem</h1>
+    <p>Been cheated, seen a fake listing or a suspicious offer? Tell us here and the AgroLink team will look into it.</p>
   </div>
 </header>
 
@@ -36,52 +36,58 @@
   <div class="container">
     <div class="grid grid-2">
       <div>
-         <form id="contactForm" class="card" style="padding:22px" onsubmit="submitContact(event)">
+        <div class="demo-note">Reports sent here are private and go straight to the AgroLink team.</div>
+        <form id="contactForm" class="card" style="padding:22px" onsubmit="submitContact(event)">
           <div class="form-grid">
             <div class="form-field">
-              <label for="name">Name</label>
+              <label for="name">Your Name</label>
               <input type="text" id="name" required minlength="2" />
             </div>
             <div class="form-field">
-              <label for="organization">Organization</label>
-              <input type="text" id="organization" />
+              <label for="organization">Who or what are you reporting?</label>
+              <input type="text" id="organization" placeholder="Name of the farmer, buyer or produce" />
             </div>
             <div class="form-field">
-              <label for="email">Email</label>
+              <label for="email">Your Email</label>
               <input type="email" id="email" required placeholder="name@example.com" />
             </div>
             <div class="form-field">
-              <label for="contactPhone">Phone</label>
+              <label for="contactPhone">Your Phone</label>
               <input type="tel" id="contactPhone" pattern="[0-9+ ]{7,15}" placeholder="08030000000" />
             </div>
             <div class="form-field form-full">
-              <label for="partnershipType">Partnership Type</label>
+              <label for="partnershipType">Type of Problem</label>
               <select id="partnershipType" required>
                 <option value="">Select one</option>
-                <option>Buyer</option><option>NGO</option><option>Government</option>
-                <option>Cooperative</option><option>Agricultural Organization</option><option>Other</option>
+                <option>Scam or fraud</option>
+                <option>Fake or misleading listing</option>
+                <option>Payment problem</option>
+                <option>Produce not delivered</option>
+                <option>Wrong or unfair price</option>
+                <option>Abuse or harassment</option>
+                <option>Other problem</option>
               </select>
             </div>
             <div class="form-field form-full">
-              <label for="message">Message</label>
-              <textarea id="message" rows="5" required minlength="10" placeholder="Tell us how you would like to work with us."></textarea>
+              <label for="message">What happened?</label>
+              <textarea id="message" rows="5" required minlength="10" placeholder="Explain what happened, when it happened, and any phone number or name involved."></textarea>
             </div>
           </div>
-          <p style="margin-top:18px"><button type="submit" class="btn btn-primary">Send Message</button></p>
+          <p style="margin-top:18px"><button type="submit" class="btn btn-primary">Send Report</button></p>
           <div id="contactSuccess"></div>
         </form>
       </div>
 
       <div>
         <div class="card"><div class="card-body">
-          <h3>Contact Information</h3>
-          
-          <p class="small">📧 admin@agrolinkebonyi.com<br />
-             📞 0814 026 5183<br />
-             📍 Abakaliki, Ebonyi State, Nigeria</p>
+          <h3>Stay safe when trading</h3>
+          <p class="small">Always call the farmer or buyer before paying. Meet in a busy market place, check the produce yourself, and avoid sending money to anyone you have not spoken to.</p>
           <hr style="border:none;border-top:1px solid var(--border);margin:16px 0" />
-          <h3>Who we work with</h3>
-          <p class="small">Buyers and off-takers, NGOs, government agricultural agencies, farming cooperatives and input suppliers who want to reach farmers directly.</p>
+          <h3>What happens to your report</h3>
+          <p class="small">The AgroLink team reads every report in the admin inbox. Listings found to be fake or dishonest are removed from the marketplace.</p>
+          <hr style="border:none;border-top:1px solid var(--border);margin:16px 0" />
+          <h3>Urgent cases</h3>
+          <p class="small">If you have lost money or feel unsafe, also report the matter to the Nigeria Police in your local government area.</p>
         </div></div>
       </div>
     </div>
@@ -95,7 +101,7 @@
       <div><h4>Pages</h4>
         <a href="index.html">Home</a><a href="marketplace.html">Marketplace</a>
         <a href="list-produce.html">List Your Product</a><a href="prices.html">Market Prices</a></div>
-      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Contact / Partner</a></div>
+      <div><h4>More</h4><a href="weather.html">Weather</a><a href="directory.html">Directory</a><a href="contact.html">Report a Problem</a></div>
     </div>
     <div class="footer-bottom">© 2026 AgroLink Ebonyi</div>
   </div>
